@@ -48,4 +48,4 @@ This Python project aims to recognize handwritten characters and numbers from a 
 
 The dataset used in this project consists of handwritten characters and numbers. It contains a total of 3,410 samples, where each sample is a grayscale image of size YxZ pixels. It contains 62 classes with 55 images of each class. The 62 classes are 0-9, A-Z and a-z.
 
-[HandWritten Dataset] https://www.kaggle.com/datasets/dhruvildave/english-handwritten-characters-dataset/data
+Dataset: [HandWritten Dataset] (https://www.kaggle.com/datasets/dhruvildave/english-handwritten-characters-dataset/data).
