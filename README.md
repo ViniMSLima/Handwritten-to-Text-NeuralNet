@@ -8,7 +8,7 @@ This Python project aims to recognize handwritten characters and numbers from a 
 - Keras
 - NumPy
 - Matplotlib (for visualization, optional)
-- [HandWritten Dataset](https://www.kaggle.com/datasets/dhruvildave/englishhandwritten-characters-dataset/data).
+- [HandWritten Dataset](https://www.kaggle.com/datasets/dhruvildave/english-handwritten-characters-dataset/data).
 
 ## Installation
 1. **Clone this repository to your local machine:**  
