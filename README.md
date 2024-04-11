@@ -72,5 +72,5 @@ This project is licensed under the MIT License.
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 ## Acknowledgements
-- [English Handwritten Characters by Dhruvil Dave](https://www.kaggle.com/datasets/dhruvildave/englishhandwritten-characters-dataset/data).
+- [English Handwritten Characters by Dhruvil Dave](https://www.kaggle.com/datasets/dhruvildave/english-handwritten-characters-dataset/data).
 - [Keras Documentation](https://keras.io/).
