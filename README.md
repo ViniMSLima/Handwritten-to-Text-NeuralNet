@@ -8,7 +8,7 @@ This Python project aims to recognize handwritten characters and numbers from a 
 - Keras
 - NumPy
 - Matplotlib (for visualization, optional)
-- [Dataset] https://www.kaggle.com/datasets/dhruvildave/englishhandwritten-characters-dataset/data
+- [Dataset] (https://www.kaggle.com/datasets/dhruvildave/englishhandwritten-characters-dataset/data)
 
 ## Installation
 1. **Clone this repository to your local machine:**  
@@ -24,4 +24,28 @@ This Python project aims to recognize handwritten characters and numbers from a 
 
 ## Usage
 
-........
+1. **Navigate to the project directory:** 
+    ```bash
+    cd handwritten-recognition
+    ```
+
+2. **Use the transform.py to apply filters on the dataset images randomly:**
+    ```bash
+    python transform.py
+    ```
+
+2. **Train the neural network:**
+    ```bash
+    python train.py
+    ```
+
+3. **Once training is complete, test the model:**
+    ```bash
+    python test.py
+    ```
+
+## Dataset
+
+The dataset used in this project consists of handwritten characters and numbers. It contains a total of 3,410 samples, where each sample is a grayscale image of size YxZ pixels. It contains 62 classes with 55 images of each class. The 62 classes are 0-9, A-Z and a-z.
+
+[Dataset] https://www.kaggle.com/datasets/dhruvildave/english-handwritten-characters-dataset/data
