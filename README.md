@@ -4,7 +4,7 @@
 This Python project aims to recognize handwritten characters and numbers from a dataset using a neural network implemented with Keras. Handwritten character and number recognition is a fundamental problem in computer vision and machine learning, with applications ranging from optical character recognition (OCR) to automated form processing.
 
 ## Requirements
-- Python 3.x
+- Python 3.11.4 64-bit
 - Keras
 - NumPy
 - Matplotlib (for visualization, optional)
