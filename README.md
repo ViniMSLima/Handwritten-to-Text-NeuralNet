@@ -7,6 +7,8 @@ This Python project aims to recognize handwritten characters and numbers from a 
 - Python 3.11.4 64-bit
 - Keras
 - NumPy
+- Shutil
+- Pillow
 - Matplotlib (for visualization, optional)
 - [HandWritten Dataset](https://www.kaggle.com/datasets/dhruvildave/english-handwritten-characters-dataset/data).
 
@@ -18,9 +20,9 @@ This Python project aims to recognize handwritten characters and numbers from a 
 
 2. **Install the required dependencies:**
     ```bash
-    pip install keras numpy matplotlib
+    pip install keras numpy matplotlib shutil pillow
     ```
-3. **Download the dataset and place it in the datasets/ directory.**
+3. **Download the dataset and place it in the general folder handwritten-to-text-neuralnet/ directory, do the same with the csv that comes together with the dataset .**
 
 ## Usage
 
@@ -29,17 +31,22 @@ This Python project aims to recognize handwritten characters and numbers from a 
     cd handwritten-to-text-neuralnet
     ```
 
-2. **Use the transform.py to apply filters on the dataset images randomly:**
+2. **Use the organize.py to organize the images of the dataset in their respective folders:**
+    ```bash
+    python organize.py
+    ```
+
+3. **Use the transform.py to apply filters on the dataset images randomly:**
     ```bash
     python transform.py
     ```
 
-2. **Train the neural network:**
+4. **Train the neural network:**
     ```bash
     python train.py
     ```
 
-3. **Once training is complete, test the model:**
+5. **Once training is complete, test the model:**
     ```bash
     python test.py
     ```
