@@ -19,3 +19,4 @@ C:\Users\disrct\Desktop\VC_Projeto\flood_fill\obj\Release\net7.0\refint\flood_fi
 C:\Users\disrct\Desktop\VC_Projeto\flood_fill\obj\Release\net7.0\flood_fill.pdb
 C:\Users\disrct\Desktop\VC_Projeto\flood_fill\obj\Release\net7.0\flood_fill.genruntimeconfig.cache
 C:\Users\disrct\Desktop\VC_Projeto\flood_fill\obj\Release\net7.0\ref\flood_fill.dll
+C:\Users\disrct\Desktop\VC_Projeto\flood_fill\bin\Release\net7.0\Python.Runtime.dll
