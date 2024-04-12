@@ -3,7 +3,7 @@ from tensorflow.keras import models, layers, activations, \
 optimizers, utils, losses, initializers, metrics, callbacks
 
 epochs = 100
-batch_size = 75
+batch_size = 20
 patience = 10
 learning_rate = 0.001
 model_path = 'checkpoints/model.keras'
