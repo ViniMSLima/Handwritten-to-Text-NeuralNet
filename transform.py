@@ -13,8 +13,11 @@ letras_minusculas = [("lower" + chr(i)) for i in range(65, 91)]
 
 pastas = numeros + letras + letras_minusculas
 
-# for pst in pastas:
-#     os.mkdir(f"datasets/ds/{pst}")
+exist = os.path.exists(f'datasets/ds/0')
+
+if not exist:
+    for pst in pastas:
+        os.mkdir(f"datasets/ds/{pst}")
 
 def show(img):
     plt.imshow(img, cmap = 'gray')
