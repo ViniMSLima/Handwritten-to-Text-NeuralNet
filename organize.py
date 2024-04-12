@@ -1,7 +1,12 @@
 import os
 import csv
+import shutil
 import string
 import pandas as pd
+from PIL import Image
+
+def moveFiles(file_path, dir_path):
+    shutil.move(file_path, dir_path)
 
 def datasetOrganizer(csv_file, img_folder):
     df = pd.read_csv(csv_file, header=None)
@@ -24,6 +29,10 @@ def datasetOrganizer(csv_file, img_folder):
             new_img_path = os.path.join(label_folder, os.path.basename(img_path))
             os.rename(img_path, new_img_path)
 
-csv_file = "english.csv"
-img_folder = "Img"
+dir_path = 'datasets'
+img_folder = 'Img'
+csv_file = 'english.csv'
+
 datasetOrganizer(csv_file, img_folder)
+moveFiles(img_folder, dir_path)
+moveFiles(csv_file, dir_path)

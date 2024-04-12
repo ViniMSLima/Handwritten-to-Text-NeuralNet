@@ -1,54 +1,61 @@
 import os
 from tensorflow.keras import models, layers, activations, \
-optimizers, utils, losses, initializers, metrics, callbacks
+optimizers, utils, losses, initializers, metrics, callbacks, regularizers
 
 epochs = 500 
-batch_size = 64 
-patience = 20
-learning_rate = 0.0005
+batch_size = 50 
+patience = 10
+learning_rate = 0.0001
 model_path = 'checkpoints/model.keras'
 exists = os.path.exists(model_path)
 
 model = models.load_model(model_path) if exists else models.Sequential([
-    layers.Resizing(120, 120),
-    layers.Rescaling(1.0 / 255),
-    layers.RandomFlip(mode="horizontal_and_vertical", seed=120),
+    layers.Resizing(128, 128),
     layers.RandomRotation((-0.2, 0.2)),
-    layers.Conv2D(16, (7, 7),
-                  activation='relu',
-                  kernel_initializer=initializers.RandomNormal()),
+    layers.Conv2D(16, (5, 5),
+                    activation='relu',
+                    kernel_initializer=initializers.RandomNormal()
+                ),
     layers.MaxPooling2D((2, 2)),
     layers.Conv2D(64, (5, 5),
-                  activation='relu',
-                  kernel_initializer=initializers.RandomNormal()),
+                    activation='relu',
+                    kernel_initializer=initializers.RandomNormal()
+                ),
+    layers.MaxPooling2D((2, 2)),
+    layers.Conv2D(64, (5, 5),
+                    activation='relu',
+                    kernel_initializer=initializers.RandomNormal()
+                ),
     layers.MaxPooling2D((2, 2)),
     layers.Conv2D(128, (3, 3),
-                  activation='relu',
-                  kernel_initializer=initializers.RandomNormal()),
+                    activation='relu',
+                    kernel_initializer=initializers.RandomNormal()
+                ),
     layers.MaxPooling2D((2, 2)),
-    layers.Dropout(0.2),
     layers.Flatten(),
     layers.Dense(128,
-                 activation='relu',
-                 kernel_initializer=initializers.RandomNormal()),
-    layers.Dropout(0.5),
-    layers.Dense(256,
-                 activation='relu',
-                 kernel_initializer=initializers.RandomNormal()),
-    layers.Dropout(0.3),
-    layers.Dense(128,
-                 activation='relu',
-                 kernel_initializer=initializers.RandomNormal()),
-    layers.Dropout(0.2),
+                    activation='relu',
+                    kernel_initializer=initializers.RandomNormal(),
+                    kernel_regularizer=regularizers.l2(0.02)
+                ),
     layers.Dense(64,
-                 activation='relu',
-                 kernel_initializer=initializers.RandomNormal()),
+                    activation='relu',
+                    kernel_initializer=initializers.RandomNormal(),
+                    kernel_regularizer=regularizers.l2(0.02)
+                ),
+    layers.Dense(64,
+                    activation='relu',
+                    kernel_initializer=initializers.RandomNormal()
+                ),
     layers.Dense(32,
-                 activation='relu',
-                 kernel_initializer=initializers.RandomNormal()),
-    layers.Dense(17,
-                 activation='softmax',
-                 kernel_initializer=initializers.RandomNormal())
+                    activation='relu',
+                    kernel_initializer=initializers.RandomNormal(),
+                    kernel_regularizer=regularizers.l2(0.02)
+                ),
+    layers.Dense(62,
+                    activation='softmax',
+                    kernel_initializer=initializers.RandomNormal()
+                )
 ])
     
 if exists:
