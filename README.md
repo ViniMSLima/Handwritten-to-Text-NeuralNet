@@ -64,8 +64,8 @@ After training the model for Z epochs, the accuracy achieved on the test set is 
 1. Experiment with different neural network architectures to improve accuracy.
 2. Explore data augmentation techniques to enhance the robustness of the model.
 3. Fine-tune hyperparameters to optimize performance further.
-4. Create an application in C# using WinForms to write on the scren and identify the charactetr
-5. Upgrade the C# application to recognize words and place it correctly on lines of a notebool page
+4. Create an application in C# using WinForms to write on the screen and identify the character
+5. Upgrade the C# application to recognize words and place it correctly on lines of a notebook page
 
 ## License
 This project is licensed under the MIT License.
