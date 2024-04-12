@@ -5,13 +5,14 @@ optimizers, utils, losses, initializers, metrics, callbacks, regularizers
 epochs = 500 
 batch_size = 32
 patience = 10
-learning_rate = 0.0001
+learning_rate = 0.001
 model_path = 'checkpoints/model.keras'
 exists = os.path.exists(model_path)
 
 model = models.load_model(model_path) if exists else models.Sequential([
     layers.Resizing(64, 64),
     layers.RandomRotation((-0.2, 0.2)),
+    layers.Dropout(0.2),
     layers.Conv2D(16, (5, 5),
                     activation='relu',
                     kernel_initializer=initializers.RandomNormal()
@@ -45,6 +46,7 @@ model = models.load_model(model_path) if exists else models.Sequential([
                     activation='relu',
                     kernel_initializer=initializers.RandomNormal()
                 ),
+    layers.Dropout(0.2),
     layers.Dense(32,
                     activation='relu',
                     kernel_initializer=initializers.RandomNormal()
