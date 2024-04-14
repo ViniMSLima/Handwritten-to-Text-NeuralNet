@@ -936,19 +936,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\disrct\\.nuget\\packages\\": {}
+    "C:\\Users\\vinis\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\disrct\\Desktop\\VC_Projeto\\flood_fill\\flood_fill.csproj",
+      "projectUniqueName": "C:\\Users\\vinis\\OneDrive\\Área de Trabalho\\Handwritten-to-Text-NeuralNet\\flood_fill\\flood_fill.csproj",
       "projectName": "flood_fill",
-      "projectPath": "C:\\Users\\disrct\\Desktop\\VC_Projeto\\flood_fill\\flood_fill.csproj",
-      "packagesPath": "C:\\Users\\disrct\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\disrct\\Desktop\\VC_Projeto\\flood_fill\\obj\\",
+      "projectPath": "C:\\Users\\vinis\\OneDrive\\Área de Trabalho\\Handwritten-to-Text-NeuralNet\\flood_fill\\flood_fill.csproj",
+      "packagesPath": "C:\\Users\\vinis\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\vinis\\OneDrive\\Área de Trabalho\\Handwritten-to-Text-NeuralNet\\flood_fill\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\disrct\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        "C:\\Users\\vinis\\AppData\\Roaming\\NuGet\\NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net7.0"
@@ -997,7 +997,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.315\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.405\\RuntimeIdentifierGraph.json"
       }
     }
   }

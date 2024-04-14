@@ -1,0 +1,14 @@
+C:\Users\vinis\OneDrive\Área de Trabalho\Handwritten-to-Text-NeuralNet\application\obj\Debug\net7.0-windows\application.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\vinis\OneDrive\Área de Trabalho\Handwritten-to-Text-NeuralNet\application\obj\Debug\net7.0-windows\application.AssemblyInfoInputs.cache
+C:\Users\vinis\OneDrive\Área de Trabalho\Handwritten-to-Text-NeuralNet\application\obj\Debug\net7.0-windows\application.AssemblyInfo.cs
+C:\Users\vinis\OneDrive\Área de Trabalho\Handwritten-to-Text-NeuralNet\application\obj\Debug\net7.0-windows\application.csproj.CoreCompileInputs.cache
+C:\Users\vinis\OneDrive\Área de Trabalho\Handwritten-to-Text-NeuralNet\application\bin\Debug\net7.0-windows\application.exe
+C:\Users\vinis\OneDrive\Área de Trabalho\Handwritten-to-Text-NeuralNet\application\bin\Debug\net7.0-windows\application.deps.json
+C:\Users\vinis\OneDrive\Área de Trabalho\Handwritten-to-Text-NeuralNet\application\bin\Debug\net7.0-windows\application.runtimeconfig.json
+C:\Users\vinis\OneDrive\Área de Trabalho\Handwritten-to-Text-NeuralNet\application\bin\Debug\net7.0-windows\application.dll
+C:\Users\vinis\OneDrive\Área de Trabalho\Handwritten-to-Text-NeuralNet\application\bin\Debug\net7.0-windows\application.pdb
+C:\Users\vinis\OneDrive\Área de Trabalho\Handwritten-to-Text-NeuralNet\application\obj\Debug\net7.0-windows\application.dll
+C:\Users\vinis\OneDrive\Área de Trabalho\Handwritten-to-Text-NeuralNet\application\obj\Debug\net7.0-windows\refint\application.dll
+C:\Users\vinis\OneDrive\Área de Trabalho\Handwritten-to-Text-NeuralNet\application\obj\Debug\net7.0-windows\application.pdb
+C:\Users\vinis\OneDrive\Área de Trabalho\Handwritten-to-Text-NeuralNet\application\obj\Debug\net7.0-windows\application.genruntimeconfig.cache
+C:\Users\vinis\OneDrive\Área de Trabalho\Handwritten-to-Text-NeuralNet\application\obj\Debug\net7.0-windows\ref\application.dll
