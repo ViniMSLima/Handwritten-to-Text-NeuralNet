@@ -158,7 +158,7 @@ namespace WriteOnScreen
             // Importe os módulos necessários
             dynamic tf = Py.Import("tensorflow");
             dynamic np = Py.Import("numpy");
-            dynamic model = tf.keras.models.load_model("C:/Users/disrct/Desktop/VC_Projeto/checkpoints/model.keras");
+            dynamic model = tf.keras.models.load_model("C:/Users/disrct/Desktop/VC_Projeto/checkpoints/model2.keras");
 
             // Converta os dados para um formato aceito pelo modelo
             dynamic dataArray = np.array(data);
