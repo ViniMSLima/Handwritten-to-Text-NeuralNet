@@ -6,7 +6,7 @@ ImageProcessor.ProcessImage("tests/inqui.png");
 
 public static class NeuralNetwork
 {
-    public static void Paitu(byte[,] byteArray)
+    public static void Paitu()
     {
         // python --version
         Runtime.PythonDLL = "python311.dll";
@@ -14,7 +14,7 @@ public static class NeuralNetwork
 
         dynamic tf = Py.Import("tensorflow");
         dynamic np = Py.Import("numpy");
-        dynamic model = tf.keras.models.load_model("model.keras");
+        dynamic model = tf.keras.models.load_model("application/classes/model.keras");
         // pip install pillow
         dynamic list = new PyList();
         list.append(tf.keras.utils.load_img("19.png"));

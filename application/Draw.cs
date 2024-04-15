@@ -3,7 +3,13 @@ using System.Drawing;
 using System.Windows.Forms;
 using System.Drawing.Drawing2D;
 
+using System.IO;
+using System.Drawing.Imaging;
+using Python.Runtime;
+
+
 using CharacterFinder;
+
 
 namespace WriteOnScreen
 {
@@ -94,9 +100,42 @@ namespace WriteOnScreen
         {
             // Extract drawing from the highlighted rectangle
             Bitmap extractedBitmap = ExtractDrawingFromHighlightRect();
-            Console.WriteLine(extractedBitmap.Width.ToString());
 
-            ImageProcessor.ProcessImage(extractedBitmap);
+            // Obtenha as coordenadas dos retângulos das letras
+            List<Rectangle> letters = ImageProcessor.ProcessImage(extractedBitmap);
+
+            // Lista para armazenar os bitmaps recortados de cada letra
+            List<Bitmap> croppedLetters = new List<Bitmap>();
+
+            // Recorte cada letra da imagem original
+            foreach (Rectangle letterRect in letters)
+            {
+                // Crie um bitmap para armazenar a parte recortada da imagem original
+                Bitmap croppedLetterBitmap = new Bitmap(letterRect.Width, letterRect.Height);
+
+                // Realize o recorte da parte desejada da imagem original
+                using (Graphics g = Graphics.FromImage(croppedLetterBitmap))
+                {
+                    g.DrawImage(extractedBitmap, new Rectangle(0, 0, croppedLetterBitmap.Width, croppedLetterBitmap.Height),
+                                letterRect, GraphicsUnit.Pixel);
+                }
+
+                // Adicione o bitmap recortado à lista
+                croppedLetters.Add(croppedLetterBitmap);
+            }
+
+            // Agora você pode passar cada bitmap da letra para a rede neural
+            foreach (Bitmap croppedLetter in croppedLetters)
+            {
+                // Converta o bitmap da letra em um formato aceito pela rede neural
+                byte[] byteArray = BitmapToByteArray(croppedLetter);
+
+                // Faça a previsão para o bitmap atual
+                dynamic prediction = PredictWithNeuralNetwork(byteArray);
+
+                // Exiba o resultado da previsão em uma MessageBox
+                MessageBox.Show(prediction.ToString());
+            }
 
             // Apaga apenas o que foi desenhado dentro da área delimitada
             using (Graphics clearGraphics = Graphics.FromImage(Bmp))
@@ -105,6 +144,43 @@ namespace WriteOnScreen
                 clearGraphics.FillRectangle(new SolidBrush(Color.White), HighlightRect);
             }
             Pb.Refresh();
+        }
+
+
+        // Método para fazer a previsão com a rede neural
+        private static dynamic PredictWithNeuralNetwork(byte[] data)
+        {
+            Runtime.PythonDLL = "python311.dll";
+
+            // Inicialize o PythonEngine
+            PythonEngine.Initialize();
+
+            // Importe os módulos necessários
+            dynamic tf = Py.Import("tensorflow");
+            dynamic np = Py.Import("numpy");
+            dynamic model = tf.keras.models.load_model("C:/Users/disrct/Desktop/VC_Projeto/checkpoints/model.keras");
+
+            // Converta os dados para um formato aceito pelo modelo
+            dynamic dataArray = np.array(data);
+
+            // Faça a previsão
+            dynamic result = model.predict(dataArray);
+
+            // Desligue o PythonEngine
+            PythonEngine.Shutdown();
+
+            return result;
+        }
+
+
+        // Método auxiliar para converter um bitmap em um array de bytes
+        private static byte[] BitmapToByteArray(Bitmap bitmap)
+        {
+            using (MemoryStream stream = new MemoryStream())
+            {
+                bitmap.Save(stream, ImageFormat.Png);
+                return stream.ToArray();
+            }
         }
 
 

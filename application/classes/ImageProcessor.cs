@@ -6,7 +6,7 @@ namespace CharacterFinder;
 
 public class ImageProcessor
 {
-    public static void ProcessImage(Bitmap image)
+    public static List<Rectangle> ProcessImage(Bitmap image)
     {
         // Inicie o cronômetro
         Stopwatch stopwatch = new();
@@ -26,6 +26,7 @@ public class ImageProcessor
                 g.DrawRectangle(Pens.Red, rect);
         }
 
+
         string outputImagePath = "tests/output.png";
         byte[,] arr = ImageToGrayscaleMatrix(image);
         Console.WriteLine(arr[0, 0]);
@@ -38,6 +39,9 @@ public class ImageProcessor
 
         // Exiba o tempo decorrido
         Console.WriteLine($"Tempo decorrido: {stopwatch.ElapsedMilliseconds} ms");
+
+        //Retorna os retangulinhos
+        return letterRectangles;
     }
 
     public static byte[,] ImageToGrayscaleMatrix(Bitmap image)

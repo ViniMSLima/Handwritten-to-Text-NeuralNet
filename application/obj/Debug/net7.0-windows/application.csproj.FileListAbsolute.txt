@@ -27,3 +27,5 @@ C:\Users\disrct\Desktop\VC_Projeto\application\obj\Debug\net7.0-windows\refint\a
 C:\Users\disrct\Desktop\VC_Projeto\application\obj\Debug\net7.0-windows\application.pdb
 C:\Users\disrct\Desktop\VC_Projeto\application\obj\Debug\net7.0-windows\application.genruntimeconfig.cache
 C:\Users\disrct\Desktop\VC_Projeto\application\obj\Debug\net7.0-windows\ref\application.dll
+C:\Users\disrct\Desktop\VC_Projeto\application\bin\Debug\net7.0-windows\Python.Runtime.dll
+C:\Users\disrct\Desktop\VC_Projeto\application\obj\Debug\net7.0-windows\application.csproj.CopyComplete
