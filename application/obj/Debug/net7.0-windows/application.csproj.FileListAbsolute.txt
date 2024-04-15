@@ -1,0 +1,31 @@
+C:\Users\vinis\OneDrive\Área de Trabalho\Handwritten-to-Text-NeuralNet\application\obj\Debug\net7.0-windows\application.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\vinis\OneDrive\Área de Trabalho\Handwritten-to-Text-NeuralNet\application\obj\Debug\net7.0-windows\application.AssemblyInfoInputs.cache
+C:\Users\vinis\OneDrive\Área de Trabalho\Handwritten-to-Text-NeuralNet\application\obj\Debug\net7.0-windows\application.AssemblyInfo.cs
+C:\Users\vinis\OneDrive\Área de Trabalho\Handwritten-to-Text-NeuralNet\application\obj\Debug\net7.0-windows\application.csproj.CoreCompileInputs.cache
+C:\Users\vinis\OneDrive\Área de Trabalho\Handwritten-to-Text-NeuralNet\application\bin\Debug\net7.0-windows\application.exe
+C:\Users\vinis\OneDrive\Área de Trabalho\Handwritten-to-Text-NeuralNet\application\bin\Debug\net7.0-windows\application.deps.json
+C:\Users\vinis\OneDrive\Área de Trabalho\Handwritten-to-Text-NeuralNet\application\bin\Debug\net7.0-windows\application.runtimeconfig.json
+C:\Users\vinis\OneDrive\Área de Trabalho\Handwritten-to-Text-NeuralNet\application\bin\Debug\net7.0-windows\application.dll
+C:\Users\vinis\OneDrive\Área de Trabalho\Handwritten-to-Text-NeuralNet\application\bin\Debug\net7.0-windows\application.pdb
+C:\Users\vinis\OneDrive\Área de Trabalho\Handwritten-to-Text-NeuralNet\application\obj\Debug\net7.0-windows\application.dll
+C:\Users\vinis\OneDrive\Área de Trabalho\Handwritten-to-Text-NeuralNet\application\obj\Debug\net7.0-windows\refint\application.dll
+C:\Users\vinis\OneDrive\Área de Trabalho\Handwritten-to-Text-NeuralNet\application\obj\Debug\net7.0-windows\application.pdb
+C:\Users\vinis\OneDrive\Área de Trabalho\Handwritten-to-Text-NeuralNet\application\obj\Debug\net7.0-windows\application.genruntimeconfig.cache
+C:\Users\vinis\OneDrive\Área de Trabalho\Handwritten-to-Text-NeuralNet\application\obj\Debug\net7.0-windows\ref\application.dll
+C:\Users\disrct\Desktop\VC_Projeto\application\bin\Debug\net7.0-windows\application.exe
+C:\Users\disrct\Desktop\VC_Projeto\application\bin\Debug\net7.0-windows\application.deps.json
+C:\Users\disrct\Desktop\VC_Projeto\application\bin\Debug\net7.0-windows\application.runtimeconfig.json
+C:\Users\disrct\Desktop\VC_Projeto\application\bin\Debug\net7.0-windows\application.dll
+C:\Users\disrct\Desktop\VC_Projeto\application\bin\Debug\net7.0-windows\application.pdb
+C:\Users\disrct\Desktop\VC_Projeto\application\obj\Debug\net7.0-windows\application.csproj.AssemblyReference.cache
+C:\Users\disrct\Desktop\VC_Projeto\application\obj\Debug\net7.0-windows\application.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\disrct\Desktop\VC_Projeto\application\obj\Debug\net7.0-windows\application.AssemblyInfoInputs.cache
+C:\Users\disrct\Desktop\VC_Projeto\application\obj\Debug\net7.0-windows\application.AssemblyInfo.cs
+C:\Users\disrct\Desktop\VC_Projeto\application\obj\Debug\net7.0-windows\application.csproj.CoreCompileInputs.cache
+C:\Users\disrct\Desktop\VC_Projeto\application\obj\Debug\net7.0-windows\application.dll
+C:\Users\disrct\Desktop\VC_Projeto\application\obj\Debug\net7.0-windows\refint\application.dll
+C:\Users\disrct\Desktop\VC_Projeto\application\obj\Debug\net7.0-windows\application.pdb
+C:\Users\disrct\Desktop\VC_Projeto\application\obj\Debug\net7.0-windows\application.genruntimeconfig.cache
+C:\Users\disrct\Desktop\VC_Projeto\application\obj\Debug\net7.0-windows\ref\application.dll
+C:\Users\disrct\Desktop\VC_Projeto\application\bin\Debug\net7.0-windows\Python.Runtime.dll
+C:\Users\disrct\Desktop\VC_Projeto\application\obj\Debug\net7.0-windows\application.csproj.CopyComplete
