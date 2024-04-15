@@ -41,6 +41,10 @@ public class ImageProcessor
         Console.WriteLine($"Tempo decorrido: {stopwatch.ElapsedMilliseconds} ms");
 
         //Retorna os retangulinhos
+
+        foreach (Rectangle rect in letterRectangles) {
+            MessageBox.Show((rect.X, rect.Y, rect).ToString());
+        }
         return letterRectangles;
     }
 

@@ -2,6 +2,7 @@
 // dotnet add package pythonnet
 using Python.Runtime;
 
+Runtime.PythonDLL = "python311.dll";
 ImageProcessor.ProcessImage("tests/inqui.png");
 
 public static class NeuralNetwork

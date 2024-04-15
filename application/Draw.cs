@@ -3,10 +3,17 @@ using System.Drawing;
 using System.Windows.Forms;
 using System.Drawing.Drawing2D;
 
+using System;
+using System.Diagnostics;
+using System.IO;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
 using System.IO;
 using System.Drawing.Imaging;
 using Python.Runtime;
 
+// dotnet add package pythonnet
 
 using CharacterFinder;
 
@@ -31,6 +38,7 @@ namespace WriteOnScreen
 
         private Draw()
         {
+            Runtime.PythonDLL = "python311.dll";
             InitializeForm();
             InitializePictureBox();
             InitializeDrawing();
@@ -101,75 +109,110 @@ namespace WriteOnScreen
             // Extract drawing from the highlighted rectangle
             Bitmap extractedBitmap = ExtractDrawingFromHighlightRect();
 
-            // Obtenha as coordenadas dos retângulos das letras
-            List<Rectangle> letters = ImageProcessor.ProcessImage(extractedBitmap);
-
-            // Lista para armazenar os bitmaps recortados de cada letra
-            List<Bitmap> croppedLetters = new List<Bitmap>();
-
-            // Recorte cada letra da imagem original
-            foreach (Rectangle letterRect in letters)
+            if (extractedBitmap != null)
             {
-                // Crie um bitmap para armazenar a parte recortada da imagem original
-                Bitmap croppedLetterBitmap = new Bitmap(letterRect.Width, letterRect.Height);
+                // Obtenha as coordenadas dos retângulos das letras
+                List<Rectangle> letters = ImageProcessor.ProcessImage(extractedBitmap);
 
-                // Realize o recorte da parte desejada da imagem original
-                using (Graphics g = Graphics.FromImage(croppedLetterBitmap))
+                if (letters != null)
                 {
-                    g.DrawImage(extractedBitmap, new Rectangle(0, 0, croppedLetterBitmap.Width, croppedLetterBitmap.Height),
-                                letterRect, GraphicsUnit.Pixel);
+                    // Lista para armazenar os bitmaps recortados de cada letra
+                    List<Bitmap> croppedLetters = new List<Bitmap>();
+
+                    // Recorte cada letra da imagem original
+                    foreach (Rectangle letterRect in letters)
+                    {
+                        // Crie um bitmap para armazenar a parte recortada da imagem original
+                        Bitmap croppedLetterBitmap = new Bitmap(letterRect.Width, letterRect.Height);
+
+                        // Realize o recorte da parte desejada da imagem original
+                        using (Graphics g = Graphics.FromImage(croppedLetterBitmap))
+                        {
+                            g.DrawImage(extractedBitmap, new Rectangle(0, 0, croppedLetterBitmap.Width, croppedLetterBitmap.Height),
+                                        letterRect, GraphicsUnit.Pixel);
+                        }
+
+                        // Adicione o bitmap recortado à lista
+                        croppedLetters.Add(croppedLetterBitmap);
+                    }
+
+                    int i = 0;
+                    // Agora você pode passar cada bitmap da letra para a rede neural
+                    foreach (Bitmap croppedLetter in croppedLetters)
+                    {
+                        Bitmap resizedImage = ResizeImage(croppedLetter, 128, 128);
+                        resizedImage.Save($"{i}.png", ImageFormat.Png);
+
+                        // Converta o bitmap da letra redimensionado em um formato aceito pela rede neural
+                        byte[] byteArray = BitmapToByteArray(resizedImage);
+
+                        MessageBox.Show("nao morre");
+                        // Faça a previsão para o bitmap atual
+                        dynamic prediction = PredictWithNeuralNetwork($"{i}.png");
+                        i++;
+
+                        // Exiba o resultado da previsão em uma MessageBox
+                        // MessageBox.Show(prediction);
+                    }
+
+                    // Apaga apenas o que foi desenhado dentro da área delimitada
+                    using (Graphics clearGraphics = Graphics.FromImage(Bmp))
+                    {
+                        // Apaga a área dentro do retângulo
+                        clearGraphics.FillRectangle(new SolidBrush(Color.White), HighlightRect);
+                    }
+                    Pb.Refresh();
                 }
-
-                // Adicione o bitmap recortado à lista
-                croppedLetters.Add(croppedLetterBitmap);
+                else
+                {
+                    MessageBox.Show("Lista de retângulos das letras retornou nula.");
+                }
             }
-
-            // Agora você pode passar cada bitmap da letra para a rede neural
-            foreach (Bitmap croppedLetter in croppedLetters)
+            else
             {
-                // Converta o bitmap da letra em um formato aceito pela rede neural
-                byte[] byteArray = BitmapToByteArray(croppedLetter);
-
-                // Faça a previsão para o bitmap atual
-                dynamic prediction = PredictWithNeuralNetwork(byteArray);
-
-                // Exiba o resultado da previsão em uma MessageBox
-                MessageBox.Show(prediction.ToString());
+                MessageBox.Show("O bitmap extraído está nulo.");
             }
-
-            // Apaga apenas o que foi desenhado dentro da área delimitada
-            using (Graphics clearGraphics = Graphics.FromImage(Bmp))
-            {
-                // Apaga a área dentro do retângulo
-                clearGraphics.FillRectangle(new SolidBrush(Color.White), HighlightRect);
-            }
-            Pb.Refresh();
         }
 
 
-        // Método para fazer a previsão com a rede neural
-        private static dynamic PredictWithNeuralNetwork(byte[] data)
+        private Bitmap ResizeImage(Bitmap image, int width, int height)
         {
-            Runtime.PythonDLL = "python311.dll";
+            Bitmap resizedImage = new Bitmap(width, height);
+            using (Graphics graphics = Graphics.FromImage(resizedImage))
+            {
+                graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
+                graphics.DrawImage(image, 0, 0, width, height);
+            }
+            return resizedImage;
+        }
 
-            // Inicialize o PythonEngine
-            PythonEngine.Initialize();
+        private static dynamic PredictWithNeuralNetwork(string imgPath)
+        {
+            dynamic result = null;
+            try
+            {
+                PythonEngine.Initialize();
 
-            // Importe os módulos necessários
-            dynamic tf = Py.Import("tensorflow");
-            dynamic np = Py.Import("numpy");
-            dynamic model = tf.keras.models.load_model("C:/Users/disrct/Desktop/VC_Projeto/checkpoints/model.keras");
+                dynamic tf = Py.Import("tensorflow");
+                dynamic np = Py.Import("numpy");
+                dynamic model = tf.keras.models.load_model("C:/Users/disrct/Desktop/VC_Projeto/checkpoints/model2.keras");
 
-            // Converta os dados para um formato aceito pelo modelo
-            dynamic dataArray = np.array(data);
+                // pip install pillow
+                dynamic list = new PyList();
 
-            // Faça a previsão
-            dynamic result = model.predict(dataArray);
+                dynamic img = tf.keras.utils.load_img("C:/Users/disrct/Desktop/VC_Projeto/application/0.png");
+                list.append(img);
+                MessageBox.Show("Erro na previsão: " + model);
 
-            // Desligue o PythonEngine
-            PythonEngine.Shutdown();
+                result = model.predict(list);
 
-            return result;
+                return result; // Retorna o resultado da previsão
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Erro na previsão: " + ex.Message);
+                return null; // Retorna nulo em caso de erro
+            }
         }
 
 
@@ -294,6 +337,32 @@ namespace WriteOnScreen
             this.MinimizeBox = false;
             this.StartPosition = FormStartPosition.CenterScreen;
         }
+
+        private void run_cmd()
+        {
+
+            string fileName = @"C:\sample_script.py";
+
+            Process p = new Process();
+            p.StartInfo = new ProcessStartInfo(@"C:\Python27\python.exe", fileName)
+            {
+                RedirectStandardOutput = true,
+                UseShellExecute = false,
+                CreateNoWindow = true
+            };
+            p.Start();
+
+            string output = p.StandardOutput.ReadToEnd();
+            p.WaitForExit();
+
+            Console.WriteLine(output);
+
+            Console.ReadLine();
+
+        }
     }
 
 }
+
+
+// C:\Program Files\Python311\python.exe
