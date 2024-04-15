@@ -1,7 +1,7 @@
 using System;
 using System.Drawing;
 using System.Windows.Forms;
-using System.Drawing.Drawing2D; // Adicionando a diretiva para o namespace System.Drawing.Drawing2D
+using System.Drawing.Drawing2D;
 
 using CharacterFinder;
 
@@ -42,26 +42,24 @@ namespace WriteOnScreen
 
         private Bitmap ExtractDrawingFromHighlightRect()
         {
-            // Calcula a posição relativa do retângulo de destaque em relação à tela inteira
-            Rectangle relativeHighlightRect = new Rectangle(
-                HighlightRect.X,
-                HighlightRect.Y,
-                HighlightRect.Width,
-                HighlightRect.Height);
+            // Define o retângulo de recorte relativo à imagem inteira
+            Rectangle relativeCropRect = new Rectangle(HighlightRect.X, HighlightRect.Y, HighlightRect.Width - HighlightRect.X, HighlightRect.Height - HighlightRect.Y);
+            MessageBox.Show(HighlightRect.X.ToString());
+            MessageBox.Show(HighlightRect.Y.ToString());
+            MessageBox.Show((HighlightRect.Width - HighlightRect.X).ToString());
+            MessageBox.Show((HighlightRect.Height - HighlightRect.X).ToString());
 
-            // Cria um bitmap com o tamanho do retângulo de destaque
-            Bitmap extractedBitmap = new Bitmap(HighlightRect.Width, HighlightRect.Height);
+            // Cria um bitmap para armazenar a parte recortada da imagem
+            Bitmap croppedBitmap = new Bitmap(relativeCropRect.Width, relativeCropRect.Height);
 
-            // Copia a parte correspondente da imagem original para o bitmap extraído
-            using (Graphics g = Graphics.FromImage(extractedBitmap))
+            // Realiza o recorte da parte desejada da imagem original
+            using (Graphics g = Graphics.FromImage(croppedBitmap))
             {
-                g.DrawImage(Bmp, new Rectangle(HighlightRect.X, HighlightRect.Y, extractedBitmap.Width, extractedBitmap.Height),
-                            relativeHighlightRect, GraphicsUnit.Pixel);
+                g.DrawImage(Bmp, new Rectangle(0, 0, croppedBitmap.Width, croppedBitmap.Height), relativeCropRect, GraphicsUnit.Pixel);
             }
 
-            return extractedBitmap;
+            return croppedBitmap;
         }
-
 
 
         private void InitializePictureBox()
@@ -89,7 +87,7 @@ namespace WriteOnScreen
             // Define o retângulo de destaque
             HighlightRect = new Rectangle((int)(Screen.PrimaryScreen.Bounds.Width * 0.6), (int)(Screen.PrimaryScreen.Bounds.Height * 0.7), Screen.PrimaryScreen.Bounds.Width, Screen.PrimaryScreen.Bounds.Height);
             // Desenha a borda do retângulo de destaque
-            G.DrawRectangle(new Pen(Color.Red, 2), HighlightRect);
+            G.DrawRectangle(new Pen(Color.Green, 2), HighlightRect.X - 20, HighlightRect.Y - 10, HighlightRect.Width, HighlightRect.Height);
         }
 
         private void ClearScreen()
