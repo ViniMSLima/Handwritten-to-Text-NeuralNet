@@ -5,41 +5,32 @@ optimizers, utils, losses, initializers, metrics, callbacks, regularizers
 epochs = 500 
 batch_size = 32
 patience = 10
-learning_rate = 0.001
+learning_rate = 0.0001
 model_path = 'checkpoints/model.keras'
 exists = os.path.exists(model_path)
 
 model = models.load_model(model_path) \
     if exists \
     else models.Sequential([
-        layers.Resizing(64, 64),
         layers.Rescaling(1.0/255),
-        layers.RandomRotation((-0.2, 0.2)),
-        layers.Conv2D(32, (5, 5),
+        layers.Conv2D(32, (7, 7), 
+            activation = 'relu',
+            kernel_initializer = initializers.RandomNormal()              
+        ),
+        layers.MaxPooling2D((2, 2)),
+        layers.Conv2D(64, (3, 3),
             activation = 'relu',
             kernel_initializer = initializers.RandomNormal()
         ),
         layers.MaxPooling2D((2, 2)),
-        layers.Conv2D(64, (5, 5),
-            activation = 'relu',
-            kernel_initializer = initializers.RandomNormal()
-        ),
-        layers.MaxPooling2D((2, 2)),
-        layers.Conv2D(128, (5, 5),
-            activation = 'relu',
-            kernel_initializer = initializers.RandomNormal()
-        ),
-        layers.MaxPooling2D((2, 2)),
-        layers.Dropout(0.5),
         layers.Flatten(),
-        layers.Dense(64,
-            activation = 'relu',
-            kernel_initializer = initializers.RandomNormal()
-        ),
+        layers.BatchNormalization(),
+        layers.GaussianNoise(0.5),
         layers.Dense(128,
             activation = 'relu',
             kernel_initializer = initializers.RandomNormal()
         ),
+        layers.Dropout(0.5),
         layers.Dense(256,
             activation = 'relu',
             kernel_initializer = initializers.RandomNormal()
