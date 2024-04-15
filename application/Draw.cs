@@ -3,6 +3,8 @@ using System.Drawing;
 using System.Windows.Forms;
 using System.Drawing.Drawing2D; // Adicionando a diretiva para o namespace System.Drawing.Drawing2D
 
+using CharacterFinder;
+
 namespace WriteOnScreen
 {
     public class Draw : Form
@@ -38,6 +40,30 @@ namespace WriteOnScreen
             this.KeyDown += KeyBoardDown;
         }
 
+        private Bitmap ExtractDrawingFromHighlightRect()
+        {
+            // Calcula a posição relativa do retângulo de destaque em relação à tela inteira
+            Rectangle relativeHighlightRect = new Rectangle(
+                HighlightRect.X,
+                HighlightRect.Y,
+                HighlightRect.Width,
+                HighlightRect.Height);
+
+            // Cria um bitmap com o tamanho do retângulo de destaque
+            Bitmap extractedBitmap = new Bitmap(HighlightRect.Width, HighlightRect.Height);
+
+            // Copia a parte correspondente da imagem original para o bitmap extraído
+            using (Graphics g = Graphics.FromImage(extractedBitmap))
+            {
+                g.DrawImage(Bmp, new Rectangle(HighlightRect.X, HighlightRect.Y, extractedBitmap.Width, extractedBitmap.Height),
+                            relativeHighlightRect, GraphicsUnit.Pixel);
+            }
+
+            return extractedBitmap;
+        }
+
+
+
         private void InitializePictureBox()
         {
             Pb = new PictureBox { Dock = DockStyle.Fill };
@@ -68,10 +94,15 @@ namespace WriteOnScreen
 
         private void ClearScreen()
         {
+            // Extract drawing from the highlighted rectangle
+            Bitmap extractedBitmap = ExtractDrawingFromHighlightRect();
+            Console.WriteLine(extractedBitmap.Width.ToString());
+
+            ImageProcessor.ProcessImage(extractedBitmap);
+
             // Apaga apenas o que foi desenhado dentro da área delimitada
             using (Graphics clearGraphics = Graphics.FromImage(Bmp))
             {
-
                 // Apaga a área dentro do retângulo
                 clearGraphics.FillRectangle(new SolidBrush(Color.White), HighlightRect);
             }
