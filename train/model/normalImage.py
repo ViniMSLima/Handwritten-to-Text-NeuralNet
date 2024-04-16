@@ -25,10 +25,9 @@ model = models.load_model(model_path) \
         ),
         layers.MaxPooling2D((2, 2)),
         layers.Flatten(),
-        layers.Dropout(0.2),
         layers.BatchNormalization(),
-        # layers.GaussianNoise(0.5),
-        layers.Dense(128,
+        layers.Dropout(0.2),
+        layers.Dense(256,
             activation = 'relu',
             kernel_initializer = initializers.RandomNormal()
         ),
