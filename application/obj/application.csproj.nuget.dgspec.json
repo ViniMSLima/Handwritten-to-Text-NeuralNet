@@ -1,27 +1,25 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\disrct\\Desktop\\caracterDetector\\Handwritten-to-Text-NeuralNet\\application\\application.csproj": {}
+    "C:\\Users\\disrct\\Desktop\\VC_Projeto\\application\\application.csproj": {}
   },
   "projects": {
-    "C:\\Users\\disrct\\Desktop\\caracterDetector\\Handwritten-to-Text-NeuralNet\\application\\application.csproj": {
+    "C:\\Users\\disrct\\Desktop\\VC_Projeto\\application\\application.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\disrct\\Desktop\\caracterDetector\\Handwritten-to-Text-NeuralNet\\application\\application.csproj",
+        "projectUniqueName": "C:\\Users\\disrct\\Desktop\\VC_Projeto\\application\\application.csproj",
         "projectName": "application",
-        "projectPath": "C:\\Users\\disrct\\Desktop\\caracterDetector\\Handwritten-to-Text-NeuralNet\\application\\application.csproj",
+        "projectPath": "C:\\Users\\disrct\\Desktop\\VC_Projeto\\application\\application.csproj",
         "packagesPath": "C:\\Users\\disrct\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\disrct\\Desktop\\caracterDetector\\Handwritten-to-Text-NeuralNet\\application\\obj\\",
+        "outputPath": "C:\\Users\\disrct\\Desktop\\VC_Projeto\\application\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\disrct\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "C:\\Users\\disrct\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net7.0-windows"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -34,11 +32,6 @@
           "warnAsError": [
             "NU1605"
           ]
-        },
-        "restoreAuditProperties": {
-          "enableAudit": "true",
-          "auditLevel": "low",
-          "auditMode": "direct"
         }
       },
       "frameworks": {
@@ -61,24 +54,6 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
-          "downloadDependencies": [
-            {
-              "name": "Microsoft.AspNetCore.App.Ref",
-              "version": "[7.0.18, 7.0.18]"
-            },
-            {
-              "name": "Microsoft.NETCore.App.Host.win-x64",
-              "version": "[7.0.18, 7.0.18]"
-            },
-            {
-              "name": "Microsoft.NETCore.App.Ref",
-              "version": "[7.0.18, 7.0.18]"
-            },
-            {
-              "name": "Microsoft.WindowsDesktop.App.Ref",
-              "version": "[7.0.18, 7.0.18]"
-            }
-          ],
           "frameworkReferences": {
             "Microsoft.NETCore.App": {
               "privateAssets": "all"
@@ -87,7 +62,7 @@
               "privateAssets": "none"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.204\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.315\\RuntimeIdentifierGraph.json"
         }
       }
     }

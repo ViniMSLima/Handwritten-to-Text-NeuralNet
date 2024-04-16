@@ -3,7 +3,7 @@ import tensorflow as tf
 import sys
 
 # Load the pre-trained model
-model = tf.keras.models.load_model("C:/Users/disrct/Desktop/VC_Projeto/train/bestModels/modelTest.keras")
+model = tf.keras.models.load_model("C:/Users/disrct/Desktop/VC_Projeto/train/bestModels/91_88_56ms.keras")
 
 def main():
     nImages = int(sys.argv[1])
