@@ -178,6 +178,7 @@ namespace WriteOnScreen
             return resizedImage;
         }
 
+
         // Método auxiliar para converter um bitmap em um array de bytes
         private void KeyBoardDown(object sender, KeyEventArgs e)
         {
