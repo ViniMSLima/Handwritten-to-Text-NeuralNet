@@ -195,12 +195,12 @@ namespace WriteOnScreen
 
                 dynamic tf = Py.Import("tensorflow");
                 dynamic np = Py.Import("numpy");
-                dynamic model = tf.keras.models.load_model("C:/Users/disrct/Desktop/VC_Projeto/checkpoints/model2.keras");
+                dynamic model = tf.keras.models.load_model("C:/Users/disrct/Desktop/caracterDetector/Handwritten-to-Text-NeuralNet/checkpoints/model.keras");
 
                 // pip install pillow
                 dynamic list = new PyList();
 
-                dynamic img = tf.keras.utils.load_img("C:/Users/disrct/Desktop/VC_Projeto/application/0.png");
+                dynamic img = tf.keras.utils.load_img("C:/Users/disrct/Desktop/caracterDetector/Handwritten-to-Text-NeuralNet/application/0.png");
                 list.append(img);
                 MessageBox.Show("Erro na previsão: " + model);
 

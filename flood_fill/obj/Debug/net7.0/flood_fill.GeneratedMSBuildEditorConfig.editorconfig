@@ -8,4 +8,6 @@ build_property.PlatformNeutralAssembly =
 build_property.EnforceExtendedAnalyzerRules = 
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = flood_fill
-build_property.ProjectDir = C:\Users\disrct\Desktop\VC_Projeto\flood_fill\
+build_property.ProjectDir = C:\Users\disrct\Desktop\caracterDetector\Handwritten-to-Text-NeuralNet\flood_fill\
+build_property.EnableComHosting = 
+build_property.EnableGeneratedComInterfaceComImportInterop = 
