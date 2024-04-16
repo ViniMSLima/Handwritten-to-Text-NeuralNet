@@ -58,10 +58,6 @@ namespace WriteOnScreen
         {
             // Define o retângulo de recorte relativo à imagem inteira
             Rectangle relativeCropRect = new Rectangle(HighlightRect.X, HighlightRect.Y, HighlightRect.Width - HighlightRect.X, HighlightRect.Height - HighlightRect.Y);
-            MessageBox.Show(HighlightRect.X.ToString());
-            MessageBox.Show(HighlightRect.Y.ToString());
-            MessageBox.Show((HighlightRect.Width - HighlightRect.X).ToString());
-            MessageBox.Show((HighlightRect.Height - HighlightRect.X).ToString());
 
             // Cria um bitmap para armazenar a parte recortada da imagem
             Bitmap croppedBitmap = new Bitmap(relativeCropRect.Width, relativeCropRect.Height);
@@ -137,23 +133,19 @@ namespace WriteOnScreen
                     }
 
                     int i = 0;
+                    List<string> paths = new();
+                    
                     // Agora você pode passar cada bitmap da letra para a rede neural
                     foreach (Bitmap croppedLetter in croppedLetters)
                     {
                         Bitmap resizedImage = ResizeImage(croppedLetter, 128, 128);
                         resizedImage.Save($"{i}.png", ImageFormat.Png);
 
-                        // Converta o bitmap da letra redimensionado em um formato aceito pela rede neural
-                        byte[] byteArray = BitmapToByteArray(resizedImage);
-
-                        MessageBox.Show("nao morre");
-                        // Faça a previsão para o bitmap atual
-                        dynamic prediction = PredictWithNeuralNetwork($"{i}.png");
+                        paths.Add($"{i}.png");
                         i++;
-
-                        // Exiba o resultado da previsão em uma MessageBox
-                        // MessageBox.Show(prediction);
                     }
+                    run_cmd(paths);
+                    
 
                     // Apaga apenas o que foi desenhado dentro da área delimitada
                     using (Graphics clearGraphics = Graphics.FromImage(Bmp))
@@ -186,47 +178,7 @@ namespace WriteOnScreen
             return resizedImage;
         }
 
-        private static dynamic PredictWithNeuralNetwork(string imgPath)
-        {
-            dynamic result = null;
-            try
-            {
-                PythonEngine.Initialize();
-
-                dynamic tf = Py.Import("tensorflow");
-                dynamic np = Py.Import("numpy");
-                dynamic model = tf.keras.models.load_model("C:/Users/disrct/Desktop/VC_Projeto/checkpoints/model2.keras");
-
-                // pip install pillow
-                dynamic list = new PyList();
-
-                dynamic img = tf.keras.utils.load_img("C:/Users/disrct/Desktop/VC_Projeto/application/0.png");
-                list.append(img);
-                MessageBox.Show("Erro na previsão: " + model);
-
-                result = model.predict(list);
-
-                return result; // Retorna o resultado da previsão
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Erro na previsão: " + ex.Message);
-                return null; // Retorna nulo em caso de erro
-            }
-        }
-
-
         // Método auxiliar para converter um bitmap em um array de bytes
-        private static byte[] BitmapToByteArray(Bitmap bitmap)
-        {
-            using (MemoryStream stream = new MemoryStream())
-            {
-                bitmap.Save(stream, ImageFormat.Png);
-                return stream.ToArray();
-            }
-        }
-
-
         private void KeyBoardDown(object sender, KeyEventArgs e)
         {
             switch (e.KeyCode)
@@ -338,31 +290,45 @@ namespace WriteOnScreen
             this.StartPosition = FormStartPosition.CenterScreen;
         }
 
-        private void run_cmd()
+        private List<string> run_cmd(
+            List<string> paths, 
+            string cmd = "C:/Program Files/Python311/python.exe", 
+            string scriptPath = "C:/Users/disrct/Desktop/VC_Projeto/application/predict.py"
+        )
         {
+            List<string> outputLines = new List<string>();
 
-            string fileName = @"C:\sample_script.py";
+            ProcessStartInfo start = new();
+            start.FileName = cmd;
 
-            Process p = new Process();
-            p.StartInfo = new ProcessStartInfo(@"C:\Python27\python.exe", fileName)
+            string args = $"{scriptPath} {paths.Count}";
+
+            foreach (string path in paths){
+                args += $" {path}";
+            }
+
+            start.Arguments = args;
+
+            MessageBox.Show(args);
+            start.UseShellExecute = false;
+            start.RedirectStandardOutput = true;
+
+            using (Process process = Process.Start(start))
             {
-                RedirectStandardOutput = true,
-                UseShellExecute = false,
-                CreateNoWindow = true
-            };
-            p.Start();
+                using (StreamReader reader = process.StandardOutput)
+                {
+                    string line;
+                    while ((line = reader.ReadLine()) != null)
+                    {
+                        outputLines.Add(line);
+                    }
+                }
+            }
 
-            string output = p.StandardOutput.ReadToEnd();
-            p.WaitForExit();
+            foreach (string toma in outputLines)
+                MessageBox.Show(toma.ToString());
 
-            Console.WriteLine(output);
-
-            Console.ReadLine();
-
+            return outputLines;
         }
     }
-
 }
-
-
-// C:\Program Files\Python311\python.exe

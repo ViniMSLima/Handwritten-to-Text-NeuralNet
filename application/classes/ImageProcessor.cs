@@ -20,11 +20,11 @@ public class ImageProcessor
         List<Rectangle> letterRectangles = LetterSegmenter.SegmentLetters(thresholdedImage, backgroundColor);
 
         // Desenhe retângulos ao redor de cada letra segmentada
-        using (Graphics g = Graphics.FromImage(image))
-        {
-            foreach (Rectangle rect in letterRectangles)
-                g.DrawRectangle(Pens.Red, rect);
-        }
+        // using (Graphics g = Graphics.FromImage(image))
+        // {
+        //     foreach (Rectangle rect in letterRectangles)
+        //         g.DrawRectangle(Pens.Red, rect);
+        // }
 
 
         string outputImagePath = "tests/output.png";
