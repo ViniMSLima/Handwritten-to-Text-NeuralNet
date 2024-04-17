@@ -30,6 +30,7 @@ namespace WriteOnScreen
         private static bool IsDrawing { get; set; }
         private Rectangle DrawingArea { get; set; } // Retângulo delimitador
         private Rectangle HighlightRect { get; set; } // Retângulo de destaque
+        private int currentThickness = 5;
 
         public static Draw _instance { get; set; }
 
@@ -43,6 +44,7 @@ namespace WriteOnScreen
             InitializePictureBox();
             InitializeDrawing();
             EnterFullScreen();
+
         }
 
         private void InitializeForm()
@@ -51,7 +53,10 @@ namespace WriteOnScreen
             this.FormBorderStyle = FormBorderStyle.None; // Remove bordas
             this.WindowState = FormWindowState.Maximized; // Maximiza janela
             this.KeyPreview = true;
+            this.Cursor = new Cursor("C:/Users/disrct/Desktop/VC_Projeto/application/a.cur");
             this.KeyDown += KeyBoardDown;
+            // Adicione este código no construtor da classe Draw, antes de chamar InitializeForm()
+
         }
 
         private Bitmap ExtractDrawingFromHighlightRect()
@@ -76,6 +81,7 @@ namespace WriteOnScreen
         {
             Pb = new PictureBox { Dock = DockStyle.Fill };
             this.Controls.Add(Pb);
+            Pb.MouseWheel += MouseWheelMoved;
         }
 
         private void InitializeDrawing()
@@ -134,7 +140,7 @@ namespace WriteOnScreen
 
                     int i = 0;
                     List<string> paths = new();
-                    
+
                     // Agora você pode passar cada bitmap da letra para a rede neural
                     foreach (Bitmap croppedLetter in croppedLetters)
                     {
@@ -145,7 +151,7 @@ namespace WriteOnScreen
                         i++;
                     }
                     run_cmd(paths);
-                    
+
 
                     // Apaga apenas o que foi desenhado dentro da área delimitada
                     using (Graphics clearGraphics = Graphics.FromImage(Bmp))
@@ -166,17 +172,32 @@ namespace WriteOnScreen
             }
         }
 
-
-        private Bitmap ResizeImage(Bitmap image, int width, int height)
+        private Bitmap ResizeImage(Bitmap image, int targetWidth, int targetHeight, double paddingPercentage = 0.5)
         {
-            Bitmap resizedImage = new Bitmap(width, height);
+            // Calcular o novo tamanho da imagem com base na porcentagem de preenchimento
+            int paddedWidth = (int)(targetWidth * (1 - paddingPercentage));
+            int paddedHeight = (int)(targetHeight * (1 - paddingPercentage));
+
+            // Criar a nova imagem com a borda em branco
+            Bitmap resizedImage = new Bitmap(targetWidth, targetHeight);
             using (Graphics graphics = Graphics.FromImage(resizedImage))
             {
+                // Preencher o fundo com branco
+                graphics.FillRectangle(Brushes.White, 0, 0, targetWidth, targetHeight);
+
+                // Calcular as coordenadas para centralizar a imagem original
+                int x = (targetWidth - paddedWidth) / 2;
+                int y = (targetHeight - paddedHeight) / 2;
+
+                // Configurar a qualidade de interpolação
                 graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
-                graphics.DrawImage(image, 0, 0, width, height);
+
+                // Desenhar a imagem original centralizada
+                graphics.DrawImage(image, x, y, paddedWidth, paddedHeight);
             }
             return resizedImage;
         }
+
 
 
         // Método auxiliar para converter um bitmap em um array de bytes
@@ -196,22 +217,37 @@ namespace WriteOnScreen
             }
         }
 
+        private void MouseWheelMoved(object sender, MouseEventArgs e)
+        {
+            // Ajusta a espessura do desenho com base na direção da rotação da roda do mouse
+            if (e.Delta > 0)
+            {
+                // Aumenta a espessura, mas limita para não ultrapassar um valor máximo
+                currentThickness = Math.Min(currentThickness + 1, 20); // Valor máximo definido como 20
+            }
+            else
+            {
+                // Diminui a espessura, mas limita para não ficar menor que um valor mínimo
+                currentThickness = Math.Max(currentThickness - 1, 1); // Valor mínimo definido como 1
+            }
+        }
+
         private void MouseClickDown(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)
             {
                 IsDrawing = true;
                 PrevMouse = e.Location;
-                DrawPoint(e.Location, Color.Black, 5);
+                DrawPoint(e.Location, Color.Black);
             }
         }
 
-        private void DrawPoint(Point location, Color color, int size)
+        private void DrawPoint(Point location, Color color)
         {
 
-            using (var pen = new Pen(color, size))
+            using (var pen = new Pen(color, currentThickness))
             {
-                G.DrawEllipse(pen, new Rectangle(location, new Size(size, size)));
+                G.DrawEllipse(pen, new Rectangle(location, new Size(currentThickness, currentThickness)));
             }
 
         }
@@ -250,7 +286,7 @@ namespace WriteOnScreen
                     // Desenha apenas dentro da área delimitada
                     if (DrawingArea.Contains(e.Location))
                     {
-                        DrawLineSmooth(PrevMouse, e.Location, Color.Black, 5);
+                        DrawLineSmooth(PrevMouse, e.Location, Color.Black, currentThickness);
                         PrevMouse = e.Location;
                     }
                 }
@@ -292,8 +328,8 @@ namespace WriteOnScreen
         }
 
         private List<string> run_cmd(
-            List<string> paths, 
-            string cmd = "C:/Program Files/Python311/python.exe", 
+            List<string> paths,
+            string cmd = "C:/Program Files/Python311/python.exe",
             string scriptPath = "C:/Users/disrct/Desktop/VC_Projeto/application/predict.py"
         )
         {
@@ -304,7 +340,8 @@ namespace WriteOnScreen
 
             string args = $"{scriptPath} {paths.Count}";
 
-            foreach (string path in paths){
+            foreach (string path in paths)
+            {
                 args += $" {path}";
             }
 

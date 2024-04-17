@@ -26,10 +26,9 @@ public class ImageProcessor
         //         g.DrawRectangle(Pens.Red, rect);
         // }
 
-
         string outputImagePath = "tests/output.png";
         byte[,] arr = ImageToGrayscaleMatrix(image);
-        Console.WriteLine(arr[0, 0]);
+        // Console.WriteLine(arr[0, 0]);
 
         // Save the processed image
         image.Save(outputImagePath, ImageFormat.Png);
