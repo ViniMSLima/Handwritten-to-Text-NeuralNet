@@ -1,22 +1,7 @@
-using System;
-using System.Drawing;
-using System.Windows.Forms;
-using System.Drawing.Drawing2D;
-
-using System;
 using System.Diagnostics;
-using System.IO;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-
-using System.IO;
 using System.Drawing.Imaging;
-using Python.Runtime;
-
-// dotnet add package pythonnet
 
 using CharacterFinder;
-
 
 namespace WriteOnScreen
 {
@@ -32,6 +17,12 @@ namespace WriteOnScreen
         private Rectangle HighlightRect { get; set; } // Retângulo de destaque
         private int currentThickness = 5;
 
+        // Fator de suavização
+        private readonly float smoothFactor = 0.3f;
+
+        // Lista de pontos suavizados
+        private List<PointF> smoothedPoints = new List<PointF>();
+
         public static Draw _instance { get; set; }
 
         public static Draw GetInstance()
@@ -39,7 +30,6 @@ namespace WriteOnScreen
 
         private Draw()
         {
-            Runtime.PythonDLL = "python311.dll";
             InitializeForm();
             InitializePictureBox();
             InitializeDrawing();
@@ -53,7 +43,7 @@ namespace WriteOnScreen
             this.FormBorderStyle = FormBorderStyle.None; // Remove bordas
             this.WindowState = FormWindowState.Maximized; // Maximiza janela
             this.KeyPreview = true;
-            this.Cursor = new Cursor("C:/Users/disrct/Desktop/VC_Projeto/application/a.cur");
+            this.Cursor = new Cursor("a.cur");
             this.KeyDown += KeyBoardDown;
             // Adicione este código no construtor da classe Draw, antes de chamar InitializeForm()
 
@@ -198,8 +188,6 @@ namespace WriteOnScreen
             return resizedImage;
         }
 
-
-
         // Método auxiliar para converter um bitmap em um array de bytes
         private void KeyBoardDown(object sender, KeyEventArgs e)
         {
@@ -212,24 +200,37 @@ namespace WriteOnScreen
                     ClearScreen();
                     break;
                 case Keys.B:
-                    IsEraser = !IsEraser;
+                    UpdateMouseCursor();
                     break;
             }
         }
 
         private void MouseWheelMoved(object sender, MouseEventArgs e)
         {
-            // Ajusta a espessura do desenho com base na direção da rotação da roda do mouse
+            // Ajusta o tamanho da borracha com base na direção da rotação da roda do mouse
             if (e.Delta > 0)
             {
-                // Aumenta a espessura, mas limita para não ultrapassar um valor máximo
+                // Aumenta o tamanho da borracha, mas limita para não ultrapassar um valor máximo
                 currentThickness = Math.Min(currentThickness + 1, 20); // Valor máximo definido como 20
             }
             else
             {
-                // Diminui a espessura, mas limita para não ficar menor que um valor mínimo
+                // Diminui o tamanho da borracha, mas limita para não ficar menor que um valor mínimo
                 currentThickness = Math.Max(currentThickness - 1, 1); // Valor mínimo definido como 1
             }
+        }
+
+        private void UpdateMouseCursor()
+        {
+            Cursor newCursor;
+            IsEraser = !IsEraser;
+
+            if (IsEraser)
+                newCursor = new Cursor("b.cur");
+            else
+                newCursor = new Cursor("a.cur"); // Substitua "caminho/para/lapis.cur" pelo caminho do arquivo do cursor do lápis
+
+            this.Cursor = newCursor;
         }
 
         private void MouseClickDown(object sender, MouseEventArgs e)
@@ -238,18 +239,22 @@ namespace WriteOnScreen
             {
                 IsDrawing = true;
                 PrevMouse = e.Location;
+                smoothedPoints.Add(PrevMouse); // Adiciona o primeiro ponto
                 DrawPoint(e.Location, Color.Black);
+            }
+
+            if (e.Button == MouseButtons.Right)
+            {
+               UpdateMouseCursor();
             }
         }
 
         private void DrawPoint(Point location, Color color)
         {
-
             using (var pen = new Pen(color, currentThickness))
             {
                 G.DrawEllipse(pen, new Rectangle(location, new Size(currentThickness, currentThickness)));
             }
-
         }
 
         private void MouseClickUp(object sender, MouseEventArgs e)
@@ -257,6 +262,7 @@ namespace WriteOnScreen
             if (e.Button == MouseButtons.Left)
             {
                 IsDrawing = false;
+                smoothedPoints.Clear(); // Limpa os pontos suavizados ao terminar o desenho
             }
         }
 
@@ -264,35 +270,42 @@ namespace WriteOnScreen
         {
             if (IsDrawing)
             {
-                if (IsEraser)
+                if (DrawingArea.Contains(e.Location))
                 {
-                    // Aumenta a área de apagamento
-                    Rectangle eraseRect = new Rectangle(e.X - 10, e.Y - 10, 20, 20);
+                    PointF currentPoint = e.Location;
 
-                    // Apaga dentro da área delimitada
-                    if (DrawingArea.Contains(e.Location))
-                    {
-                        using (GraphicsPath path = new GraphicsPath())
-                        {
-                            path.AddEllipse(eraseRect);
-                            G.SetClip(path);
-                            G.Clear(Color.White);
-                            G.ResetClip();
-                        }
-                    }
-                }
-                else
-                {
-                    // Desenha apenas dentro da área delimitada
-                    if (DrawingArea.Contains(e.Location))
-                    {
-                        DrawLineSmooth(PrevMouse, e.Location, Color.Black, currentThickness);
-                        PrevMouse = e.Location;
-                    }
+                    // Calcula o ponto suavizado
+                    PointF smoothedPoint = SmoothPoint(currentPoint);
+
+                    // Desenha a linha suavizada
+                    if (IsEraser)
+                        DrawLineSmooth(PrevMouse, smoothedPoint, Color.White, currentThickness);
+                    else
+                        DrawLineSmooth(PrevMouse, smoothedPoint, Color.Black, currentThickness);
+
+                    // Atualiza o ponto anterior
+                    PrevMouse = smoothedPoint;
                 }
 
                 Pb.Refresh();
             }
+        }
+
+        private PointF SmoothPoint(PointF currentPoint)
+        {
+            // Se não houver pontos anteriores, retorna o ponto atual
+            if (smoothedPoints.Count == 0)
+                return currentPoint;
+
+            // Calcula o ponto suavizado como a média ponderada entre o ponto atual e o ponto anterior
+            PointF smoothedPoint = new PointF(
+                currentPoint.X * smoothFactor + smoothedPoints[^1].X * (1 - smoothFactor),
+                currentPoint.Y * smoothFactor + smoothedPoints[^1].Y * (1 - smoothFactor)
+            );
+
+            // Adiciona o ponto suavizado à lista
+            smoothedPoints.Add(smoothedPoint);
+            return smoothedPoint;
         }
 
         private void DrawLineSmooth(PointF p1, PointF p2, Color color, int size)
@@ -330,7 +343,7 @@ namespace WriteOnScreen
         private List<string> run_cmd(
             List<string> paths,
             string cmd = "C:/Program Files/Python311/python.exe",
-            string scriptPath = "C:/Users/disrct/Desktop/VC_Projeto/application/predict.py"
+            string scriptPath = "predict.py"
         )
         {
             List<string> outputLines = new List<string>();
@@ -357,14 +370,12 @@ namespace WriteOnScreen
                 {
                     string line;
                     while ((line = reader.ReadLine()) != null)
-                    {
                         outputLines.Add(line);
-                    }
                 }
             }
 
-            foreach (string toma in outputLines)
-                MessageBox.Show(toma.ToString());
+            foreach (string line in outputLines)
+                MessageBox.Show(line.ToString());
 
             return outputLines;
         }
