@@ -1,5 +1,11 @@
+using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing;
 using System.Drawing.Imaging;
+using System.IO;
+using System.Threading.Tasks;
+using System.Windows.Forms;
 
 using CharacterFinder;
 
@@ -16,6 +22,7 @@ namespace WriteOnScreen
         private Rectangle DrawingArea { get; set; } // Retângulo delimitador
         private Rectangle HighlightRect { get; set; } // Retângulo de destaque
         private int currentThickness = 5;
+        private PointF markerPosition = new PointF(20, 40); // Posição inicial do marcador
 
         // Fator de suavização
         private readonly float smoothFactor = 0.3f;
@@ -34,7 +41,6 @@ namespace WriteOnScreen
             InitializePictureBox();
             InitializeDrawing();
             EnterFullScreen();
-
         }
 
         private void InitializeForm()
@@ -45,17 +51,14 @@ namespace WriteOnScreen
             this.KeyPreview = true;
             this.Cursor = new Cursor("a.cur");
             this.KeyDown += KeyBoardDown;
-            // Adicione este código no construtor da classe Draw, antes de chamar InitializeForm()
-
         }
 
         private Bitmap ExtractDrawingFromHighlightRect()
         {
             // Define o retângulo de recorte relativo à imagem inteira
-            Rectangle relativeCropRect = new Rectangle(HighlightRect.X, HighlightRect.Y, HighlightRect.Width - HighlightRect.X, HighlightRect.Height - HighlightRect.Y);
+            Rectangle relativeCropRect = new(HighlightRect.X, HighlightRect.Y, HighlightRect.Width - HighlightRect.X, HighlightRect.Height - HighlightRect.Y);
 
-            // Cria um bitmap para armazenar a parte recortada da imagem
-            Bitmap croppedBitmap = new Bitmap(relativeCropRect.Width, relativeCropRect.Height);
+            Bitmap croppedBitmap = new(relativeCropRect.Width, relativeCropRect.Height);
 
             // Realiza o recorte da parte desejada da imagem original
             using (Graphics g = Graphics.FromImage(croppedBitmap))
@@ -65,7 +68,6 @@ namespace WriteOnScreen
 
             return croppedBitmap;
         }
-
 
         private void InitializePictureBox()
         {
@@ -140,7 +142,7 @@ namespace WriteOnScreen
                         paths.Add($"{i}.png");
                         i++;
                     }
-                    run_cmd(paths);
+                    RunCmdAsync(paths);
 
 
                     // Apaga apenas o que foi desenhado dentro da área delimitada
@@ -202,6 +204,10 @@ namespace WriteOnScreen
                 case Keys.B:
                     UpdateMouseCursor();
                     break;
+                case Keys.Enter:
+                    markerPosition.X = 20;
+                    markerPosition.Y += 15;
+                    break;
             }
         }
 
@@ -245,7 +251,7 @@ namespace WriteOnScreen
 
             if (e.Button == MouseButtons.Right)
             {
-               UpdateMouseCursor();
+                UpdateMouseCursor();
             }
         }
 
@@ -298,7 +304,7 @@ namespace WriteOnScreen
                 return currentPoint;
 
             // Calcula o ponto suavizado como a média ponderada entre o ponto atual e o ponto anterior
-            PointF smoothedPoint = new PointF(
+            PointF smoothedPoint = new(
                 currentPoint.X * smoothFactor + smoothedPoints[^1].X * (1 - smoothFactor),
                 currentPoint.Y * smoothFactor + smoothedPoints[^1].Y * (1 - smoothFactor)
             );
@@ -340,16 +346,15 @@ namespace WriteOnScreen
             this.StartPosition = FormStartPosition.CenterScreen;
         }
 
-        private List<string> run_cmd(
+        private async Task<List<string>> RunCmdAsync(
             List<string> paths,
             string cmd = "C:/Program Files/Python311/python.exe",
             string scriptPath = "predict.py"
         )
         {
-            List<string> outputLines = new List<string>();
+            List<string> outputLines = new();
 
-            ProcessStartInfo start = new();
-            start.FileName = cmd;
+            ProcessStartInfo start = new() { FileName = cmd };
 
             string args = $"{scriptPath} {paths.Count}";
 
@@ -360,7 +365,7 @@ namespace WriteOnScreen
 
             start.Arguments = args;
 
-            MessageBox.Show(args);
+            // MessageBox.Show(args);
             start.UseShellExecute = false;
             start.RedirectStandardOutput = true;
 
@@ -369,15 +374,34 @@ namespace WriteOnScreen
                 using (StreamReader reader = process.StandardOutput)
                 {
                     string line;
-                    while ((line = reader.ReadLine()) != null)
+                    while ((line = await reader.ReadLineAsync()) != null)
                         outputLines.Add(line);
                 }
             }
-
-            foreach (string line in outputLines)
-                MessageBox.Show(line.ToString());
+            
+            // MessageBox.Show(outputLines[^1]);
+            WriteTextOnScreen(outputLines[^1]);
 
             return outputLines;
         }
+
+        // Método para escrever o texto retornado pelo Python na tela
+        private void WriteTextOnScreen(string text)
+        {
+            using (Graphics graphics = Graphics.FromImage(Bmp))
+            {
+                // Define a fonte e o tamanho
+                Font font = new Font("Arial", 12, FontStyle.Regular);
+
+                // Desenha o texto na posição indicada pelo marcador
+                graphics.DrawString(text, font, Brushes.Black, markerPosition);
+
+                // Adiciona um espaço após a palavra escrita
+                markerPosition.X += graphics.MeasureString(text, font).Width + 1;
+            }
+
+            Pb.Refresh();
+        }
+
     }
 }
